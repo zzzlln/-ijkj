@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA 72天极限备考系统</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --surface: #181c27;
+    --surface2: #1e2333;
+    --border: #2a2f45;
+    --accent: #5b8af5;
+    --accent2: #f5a623;
+    --accent3: #4ecb8d;
+    --red: #f56b6b;
+    --text: #e8ecf4;
+    --text2: #8b92a8;
+    --text3: #5a6178;
+    --acct: #5b8af5;
+    --tax: #f5a623;
+    --law: #4ecb8d;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  header {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .logo-mark {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--accent), #8b6ff5);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px; font-weight: 600; color: #fff;
+    flex-shrink: 0;
+  }
+  header h1 { font-size: 18px; font-weight: 700; letter-spacing: .02em; }
+  header p { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .exam-badge {
+    margin-left: auto;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--text2);
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .exam-badge strong { display: block; color: var(--red); font-size: 15px; font-family: 'JetBrains Mono', monospace; }
+
+  nav {
+    display: flex;
+    gap: 4px;
+    padding: 16px 24px 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  nav button {
+    background: none; border: none;
+    padding: 8px 18px 12px;
+    color: var(--text2);
+    font-size: 13px;
+    font-family: 'Noto Sans SC', sans-serif;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color .15s, border-color .15s;
+  }
+  nav button.active { color: var(--text); border-bottom-color: var(--accent); }
+  nav button:hover:not(.active) { color: var(--text); }
+
+  .page { display: none; padding: 24px; max-width: 860px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  .sec-title {
+    font-size: 11px; font-weight: 500; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--text3);
+    margin-bottom: 14px;
+  }
+
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 32px;
+  }
+  .flow-step {
+    display: flex;
+    gap: 16px;
+    position: relative;
+  }
+  .flow-step::before {
+    content: '';
+    position: absolute;
+    left: 19px; top: 40px;
+    width: 1px; height: calc(100% - 8px);
+    background: var(--border);
+  }
+  .flow-step:last-child::before { display: none; }
+  .step-num {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--surface2); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 600; color: var(--accent);
+    flex-shrink: 0; z-index: 1;
+  }
+  .step-body {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    flex: 1;
+  }
+  .step-body h3 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .step-body p { font-size: 13px; color: var(--text2); line-height: 1.7; }
+  .step-body .tag {
+    display: inline-block;
+    background: var(--surface2); border-radius: 4px;
+    padding: 2px 8px; font-size: 11px; color: var(--text2);
+    margin-right: 6px; margin-top: 6px;
+  }
+  .step-body .tag.time { color: var(--accent2); }
+  .step-body .tag.tool { color: var(--accent); }
+
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  @media (max-width: 600px) { .card-grid { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .card h3 { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+  .card p, .card li { font-size: 12px; color: var(--text2); line-height: 1.8; }
+  .card ul { padding-left: 16px; }
+  .card-accent-acct { border-top: 2px solid var(--acct); }
+  .card-accent-tax  { border-top: 2px solid var(--tax); }
+  .card-accent-law  { border-top: 2px solid var(--law); }
+  .card-accent-red  { border-top: 2px solid var(--red); }
+
+  .error-form { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 24px; }
+  .error-form h3 { font-size: 14px; margin-bottom: 16px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  @media (max-width: 600px) { .form-row { grid-template-columns: 1fr 1fr; } }
+  select, input[type=text] {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); padding: 8px 10px; border-radius: 6px;
+    font-size: 13px; font-family: 'Noto Sans SC', sans-serif;
+    width: 100%; outline: none;
+  }
+  select:focus, input:focus { border-color: var(--accent); }
+  .form-row-full { margin-bottom: 10px; }
+  .btn-add {
+    background: var(--accent); color: #fff; border: none;
+    padding: 9px 20px; border-radius: 6px; font-size: 13px;
+    font-family: 'Noto Sans SC', sans-serif;
+    cursor: pointer; margin-top: 6px;
+    transition: opacity .15s;
+  }
+  .btn-add:hover { opacity: .85; }
+
+  #error-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+  .error-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 14px;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .error-item .subject-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    flex-shrink: 0; margin-top: 6px;
+  }
+  .dot-acct { background: var(--acct); }
+  .dot-tax  { background: var(--tax); }
+  .dot-law  { background: var(--law); }
+  .error-item .ei-main { flex: 1; }
+  .error-item .ei-title { font-size: 13px; font-weight: 500; }
+  .error-item .ei-meta { font-size: 11px; color: var(--text2); margin-top: 3px; }
+  .error-item .ei-note { font-size: 12px; color: var(--text2); margin-top: 6px; font-style: italic; }
+  .error-item .ei-actions { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
+  .btn-done, .btn-del {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text2); padding: 4px 10px; border-radius: 4px;
+    font-size: 11px; cursor: pointer; white-space: nowrap;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: all .15s;
+  }
+  .btn-done:hover { border-color: var(--accent3); color: var(--accent3); }
+  .btn-del:hover  { border-color: var(--red); color: var(--red); }
+  .error-item.reviewed { opacity: .45; }
+  .reviewed-badge {
+    font-size: 10px; color: var(--accent3); border: 1px solid var(--accent3);
+    border-radius: 3px; padding: 1px 5px;
+  }
+
+  .filter-bar { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .filter-btn {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text2); padding: 5px 14px; border-radius: 20px;
+    font-size: 12px; cursor: pointer; font-family: 'Noto Sans SC', sans-serif;
+    transition: all .15s;
+  }
+  .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .stats-row { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+  .stat-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 18px; flex: 1; min-width: 100px;
+  }
+  .stat-box .sv { font-family: 'JetBrains Mono', monospace; font-size: 24px; font-weight: 600; }
+  .stat-box .sl { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .sv-acct { color: var(--acct); }
+  .sv-tax  { color: var(--tax); }
+  .sv-law  { color: var(--law); }
+  .sv-all  { color: var(--text); }
+
+  .week-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  .week-row { display: grid; grid-template-columns: 80px 1fr; gap: 10px; align-items: start; }
+  .week-label { font-size: 11px; color: var(--text2); padding-top: 10px; }
+  .week-slots { display: flex; flex-direction: column; gap: 6px; }
+  .slot {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 7px; padding: 10px 14px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .slot-time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text3); width: 70px; flex-shrink: 0; }
+  .slot-label { font-size: 13px; }
+  .slot-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .slot-acct { border-left: 3px solid var(--acct); }
+  .slot-tax  { border-left: 3px solid var(--tax); }
+  .slot-law  { border-left: 3px solid var(--law); }
+  .slot-review { border-left: 3px solid var(--text3); }
+  .slot-break { border-left: 3px solid var(--border); opacity: .5; }
+
+  .tip-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+  .tip {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 16px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .tip-icon { font-size: 18px; flex-shrink: 0; }
+  .tip-body h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .tip-body p  { font-size: 12px; color: var(--text2); line-height: 1.7; }
+
+  .empty-state {
+    text-align: center; padding: 40px 20px;
+    color: var(--text3); font-size: 13px;
+  }
+  .empty-state .big { font-size: 32px; margin-bottom: 8px; }
+
+  .etype {
+    display: inline-block; border-radius: 3px;
+    padding: 1px 6px; font-size: 10px; margin-left: 6px;
+  }
+  .etype-concept { background: rgba(91,138,245,.15); color: var(--acct); }
+  .etype-calc    { background: rgba(245,166,35,.15);  color: var(--tax); }
+  .etype-miss    { background: rgba(78,203,141,.15);  color: var(--law); }
+  .etype-trap    { background: rgba(245,107,107,.15); color: var(--red); }
+
+  .phase-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .phase-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+  .phase-card p { font-size: 12px; color: var(--text2); line-height: 1.8; }
+  .phase-tag {
+    display: inline-block;
+    background: var(--surface2);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    color: var(--text2);
+    margin-right: 6px;
+  }
+
+  hr.divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-mark">72</div>
+  <div>
+    <h1>CPA 72天极限备考系统</h1>
+    <p>会计 · 税法 · 经济法 | 全职备考版 | 目标：会计60+ 税法65+ 经济法60+</p>
+  </div>
+  <div class="exam-badge">
+    考试日期<strong id="countdown-display">8月29日</strong>
+    <span id="days-left" style="font-size:11px;color:var(--text2)"></span>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="showPage('plan')">📋 三阶段计划</button>
+  <button onclick="showPage('daily')">⏱ 每日安排</button>
+  <button onclick="showPage('flow')">🔄 学习流程</button>
+  <button onclick="showPage('errors')">📌 错题索引</button>
+  <button onclick="showPage('books')">📚 用书清单</button>
+</nav>
+
+<!-- ════════════ PAGE 1: 三阶段计划 ════════════ -->
+<div id="page-plan" class="page active">
+
+  <p class="sec-title">第一阶段 · 基础攻坚期（6月18日-7月17日 · 30天）</p>
+  <div class="phase-card">
+    <h3 style="color:var(--acct)">📘 会计 — 每天4小时</h3>
+    <p><b>目标：</b>完成基础班核心章节（占分值70%）</p>
+    <p><b>策略：</b>张敬富基础班1.25倍速，重点章节（长投、合并）正常速反复听</p>
+    <p><b>重点章节：</b></p>
+    <p>• 第6章 长期股权投资（15-20分）★★★</p>
+    <p>• 第13章 金融工具（10-15分）★★★</p>
+    <p>• 第17章 收入费用利润（15-20分）★★★</p>
+    <p>• 第26章 企业合并（10-15分）★★★</p>
+    <p>• 第27章 合并财务报表（15-20分）★★★</p>
+    <p>• 第14章 租赁（8-10分）★★</p>
+    <p style="margin-top:8px">
+      <span class="phase-tag">可放弃：政府会计、每股收益、公允价值计量</span>
+    </p>
+  </div>
+
+  <div class="phase-card">
+    <h3 style="color:var(--tax)">📗 税法 — 每天2.5小时</h3>
+    <p><b>目标：</b>完成基础班+建立税种框架</p>
+    <p><b>策略：</b>刘颖基础班1.5倍速（有基础），重点计算题动手做</p>
+    <p><b>重点章节：</b></p>
+    <p>• 第2章 增值税（20-25分）★★★</p>
+    <p>• 第3章 消费税（10-15分）★★★</p>
+    <p>• 第4章 企业所得税（20-25分）★★★</p>
+    <p>• 第5章 个人所得税（10-15分）★★★</p>
+    <p style="margin-top:8px">
+      <span class="phase-tag">可放弃：国际税收、税收征管法</span>
+    </p>
+  </div>
+
+  <div class="phase-card">
+    <h3 style="color:var(--law)">📕 经济法 — 每天1.5小时</h3>
+    <p><b>目标：</b>通读教材+建立法律框架，不背诵只理解</p>
+    <p><b>策略：</b>听基础班理解法理，标记重点法条，8月再背</p>
+    <p><b>重点章节：</b></p>
+    <p>• 第4章 合同法律制度（15-20分）★★★</p>
+    <p>• 第6章 公司法律制度（15-20分）★★★</p>
+    <p>• 第7章 证券法律制度（15-20分）★★★</p>
+    <p>• 第8章 企业破产法律制度（10-12分）★★★</p>
+    <p>• 第9章 票据法律制度（10-12分）★★★</p>
+  </div>
+
+  <hr class="divider">
+  <p class="sec-title">第二阶段 · 强化突破期（7月18日-8月11日 · 25天）</p>
+  <div class="phase-card">
+    <h3 style="color:var(--acct)">📘 会计 — 每天3.5小时</h3>
+    <p>• 张敬富串讲班（20小时）</p>
+    <p>• 近5年真题分类练习（长投、合并报表、收入各做5套）</p>
+    <p>• 会计分录默写训练（每天10个核心分录）</p>
+    <p>• <b>关键：</b>合并报表必须独立做出完整分录</p>
+  </div>
+  <div class="phase-card">
+    <h3 style="color:var(--tax)">📗 税法 — 每天2.5小时</h3>
+    <p>• 刘颖串讲班（15小时）</p>
+    <p>• 四大税种计算题每天各1道（增值税、企税、个税、消费税）</p>
+    <p>• 小税种表格记忆（房产税、印花税、土地增值税）</p>
+    <p>• <b>关键：</b>企税纳税调整必须零失误</p>
+  </div>
+  <div class="phase-card">
+    <h3 style="color:var(--law)">📕 经济法 — 每天2小时</h3>
+    <p>• 听案例分析班（15小时）</p>
+    <p>• 公司法、证券法、合同法案例每天各1道</p>
+    <p>• <b>开始背诵核心法条</b>（每天2小时集中记忆）</p>
+    <p>• 票据法流程图默画</p>
+  </div>
+
+  <hr class="divider">
+  <p class="sec-title">第三阶段 · 冲刺模考期（8月12日-8月28日 · 17天）</p>
+  <div class="phase-card">
+    <h3>🎯 全科冲刺 — 按真实考试时间模拟</h3>
+    <p><b>每日安排：</b></p>
+    <p>• 08:30-11:30 会计模拟考试</p>
+    <p>• 13:00-15:00 税法模拟考试</p>
+    <p>• 17:00-19:00 经济法模拟考试</p>
+    <p>• 晚上：错题复盘+法条速记+分录默写</p>
+    <p style="margin-top:8px"><b>模拟要求：</b></p>
+    <p>• 每科至少3套完整模拟题（轻四/历年真题）</p>
+    <p>• 严格计时，机考环境练习</p>
+    <p>• 建立"必拿分"清单，确保基础题不丢分</p>
+  </div>
+
+  <div class="tip-list">
+    <div class="tip">
+      <div class="tip-icon">🚩</div>
+      <div class="tip-body">
+        <h4>关键里程碑检查点</h4>
+        <p>6/24 长投初始计量能独立做题 | 7/1 长投转换分录能默写 | 7/17 阶段测试会计≥40分税法≥50分 | 7/31 真题得分率≥60% | 8/11 错题二刷正确率≥90% | 8/15 第一次模考达标 | 8/26 停止新题只看错题</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ PAGE 2: 每日安排 ════════════ -->
+<div id="page-daily" class="page">
+  <p class="sec-title">工作日 · 高强度时间表（8-9小时）</p>
+  <div class="week-grid" style="margin-bottom:32px">
+
+    <div class="week-row">
+      <div class="week-label">早晨</div>
+      <div class="week-slots">
+        <div class="slot slot-review">
+          <div class="slot-time">07:00-07:15</div>
+          <div><div class="slot-label">昨日错题快速回顾</div><div class="slot-sub">翻索引 → 找纸质书页码 → 重做</div></div>
+        </div>
+        <div class="slot slot-acct">
+          <div class="slot-time">07:15-09:00</div>
+          <div><div class="slot-label">会计核心章节/做题</div><div class="slot-sub">分录默写10个 + 长投/合并/收入轮换</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-label">上午</div>
+      <div class="week-slots">
+        <div class="slot slot-acct">
+          <div class="slot-time">09:00-12:00</div>
+          <div><div class="slot-label">张敬富会计听课+笔记</div><div class="slot-sub">1.25倍速，重点章节正常速，实时标注⭐和❓</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-label">午间</div>
+      <div class="week-slots">
+        <div class="slot slot-break">
+          <div class="slot-time">12:00-14:00</div>
+          <div><div class="slot-label">午休 / 吃饭</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-label">下午</div>
+      <div class="week-slots">
+        <div class="slot slot-tax">
+          <div class="slot-time">14:00-17:00</div>
+          <div><div class="slot-label">刘颖税法听课/做题</div><div class="slot-sub">1.5倍速（有基础），计算题必须动笔</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-label">晚上</div>
+      <div class="week-slots">
+        <div class="slot slot-law">
+          <div class="slot-time">19:00-21:00</div>
+          <div><div class="slot-label">经济法背诵/做题</div><div class="slot-sub">8月前理解法理，8月后集中背诵法条</div></div>
+        </div>
+        <div class="slot slot-review">
+          <div class="slot-time">21:00-22:30</div>
+          <div><div class="slot-label">当日复盘+错题整理</div><div class="slot-sub">错题不过夜，明日计划制定</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="sec-title">周末 · 强化时间表（7-8小时）</p>
+  <div class="week-grid">
+    <div class="week-row">
+      <div class="week-label">早</div>
+      <div class="week-slots">
+        <div class="slot slot-review">
+          <div class="slot-time">08:00-08:30</div>
+          <div><div class="slot-label">本周错题集中回顾</div><div class="slot-sub">筛选本周全部错题 → 重做 → 标"二错"</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="week-row">
+      <div class="week-label">上午</div>
+      <div class="week-slots">
+        <div class="slot slot-acct">
+          <div class="slot-time">08:30-10:30</div>
+          <div><div class="slot-label">会计重难点章节强化</div><div class="slot-sub">本周最薄弱章节 · 做真题对应章节</div></div>
+        </div>
+        <div class="slot slot-break">
+          <div class="slot-time">10:30-10:45</div>
+          <div><div class="slot-label">休息</div></div>
+        </div>
+        <div class="slot slot-tax">
+          <div class="slot-time">10:45-12:00</div>
+          <div><div class="slot-label">税法计算专项</div><div class="slot-sub">增值税 / 企所税综合计算题</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="week-row">
+      <div class="week-label">下午</div>
+      <div class="week-slots">
+        <div class="slot slot-law">
+          <div class="slot-time">14:00-16:00</div>
+          <div><div class="slot-label">经济法案例题</div><div class="slot-sub">一道大案例题全程自己分析，不提前看答案</div></div>
+        </div>
+        <div class="slot slot-review">
+          <div class="slot-time">16:00-17:00</div>
+          <div><div class="slot-label">分录默写+法条背诵</div><div class="slot-sub">会计10个分录 + 经济法5个法条</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip-list">
+    <div class="tip">
+      <div class="tip-icon">⚠️</div>
+      <div class="tip-body">
+        <h4>每日必做指标</h4>
+        <p>✓ 会计：至少完成1个核心知识点 + 对应习题 + 10个分录默写</p>
+        <p>✓ 税法：至少完成1道计算题（四大税种轮换）</p>
+        <p>✓ 经济法：至少阅读/理解5个核心法条（8月后改为背诵）</p>
+        <p>✓ 错题：当日错题不过夜，必须搞懂</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ PAGE 3: 学习流程 ════════════ -->
+<div id="page-flow" class="page">
+
+  <p class="sec-title">单次学习 · 标准流程</p>
+  <div class="flow">
+
+    <div class="flow-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>课前激活（5 min）</h3>
+        <p>打开平板，翻上一节课的最后一页笔记，默想：今天接着讲什么？哪里没弄懂？</p>
+        <span class="tag time">⏱ 5分钟</span>
+        <span class="tag tool">📱 平板</span>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>听课 + 实时标注（40-50 min）</h3>
+        <p>平板听课，遇到以下三种情况立即暂停标注：</p>
+        <p style="margin-top:6px">
+          🔴 <b>不理解</b>的地方 → 暂停，写"？+关键词"<br>
+          ⭐ <b>老师强调</b>重要 → 标星，写考点名称<br>
+          ✏️ <b>有计算题</b> → 先不做，写"【练】"提醒自己
+        </p>
+        <span class="tag time">⏱ 40-50分钟</span>
+        <span class="tag tool">📱 平板听课</span>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>纸质做题（30-40 min）</h3>
+        <p>合上平板，拿出纸质轻一或真题，做对应章节题目。<br>
+        做题时：<b>错题旁边画圈⭕</b>，不要马上翻答案，先做完整套再对。</p>
+        <span class="tag time">⏱ 30-40分钟</span>
+        <span class="tag tool">📄 纸质题</span>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h3>对答案 + 录入错题索引（15 min）</h3>
+        <p>逐题对答案，圈出的错题录入<b>错题索引</b>（一行字即可）：<br>
+        <code style="background:var(--surface2);padding:3px 8px;border-radius:4px;font-size:12px;font-family:'JetBrains Mono',monospace">科目·章节·考点·错误类型·页码</code></p>
+        <p style="margin-top:6px">例：<code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-size:11px;font-family:'JetBrains Mono',monospace">会计·长投·成本法分红·概念混淆·轻一P87</code></p>
+        <span class="tag time">⏱ 15分钟</span>
+        <span class="tag tool">📌 本工具</span>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <h3>每日收尾回顾（10 min）</h3>
+        <p>睡前或当天结束时，打开今天的平板笔记，看一遍所有⭐标注，在脑子里默背一遍考点名称。不懂的明天课前先查。</p>
+        <span class="tag time">⏱ 10分钟</span>
+        <span class="tag tool">📱 平板</span>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+  <p class="sec-title">三科 · 学习节奏差异</p>
+  <div class="card-grid">
+    <div class="card card-accent-acct">
+      <h3 style="color:var(--acct)">📘 会计</h3>
+      <ul>
+        <li>听课后必须手写核心分录（3-5条）</li>
+        <li>不懂的分录当天解决，不要攒</li>
+        <li>合并报表建议正常速听第二遍</li>
+        <li>跨章节联动：长投→合并→所得税</li>
+      </ul>
+    </div>
+    <div class="card card-accent-tax">
+      <h3 style="color:var(--tax)">📗 税法</h3>
+      <ul>
+        <li>有基础→直接做题，不会再回听课程</li>
+        <li>税率/优惠政策单独整理一张纸贴桌边</li>
+        <li>计算题必须动笔，不能只看解析</li>
+        <li>企税纳税调整是核心中的核心</li>
+      </ul>
+    </div>
+    <div class="card card-accent-law">
+      <h3 style="color:var(--law)">📕 经济法</h3>
+      <ul>
+        <li>以案例分析为主，读题时先找"主体"</li>
+        <li>公司法/证券法必备法条要背，不能靠理解</li>
+        <li>做题步骤：定主体→找法条→判责任</li>
+        <li>8月前理解法理，8月后集中背诵</li>
+      </ul>
+    </div>
+    <div class="card card-accent-red">
+      <h3 style="color:var(--red)">⚠️ 避坑原则</h3>
+      <ul>
+        <li>不要只听课不做题（1:1比例）</li>
+        <li>不要把"看懂了"当"会做了"</li>
+        <li>错题不要抄题干，只记结论</li>
+        <li>不要买官方教材（讲义+轻一足够）</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ PAGE 4: 错题索引 ════════════ -->
+<div id="page-errors" class="page">
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="sv sv-all" id="stat-total">0</div>
+      <div class="sl">全部错题</div>
+    </div>
+    <div class="stat-box">
+      <div class="sv sv-acct" id="stat-acct">0</div>
+      <div class="sl">会计</div>
+    </div>
+    <div class="stat-box">
+      <div class="sv sv-tax" id="stat-tax">0</div>
+      <div class="sl">税法</div>
+    </div>
+    <div class="stat-box">
+      <div class="sv sv-law" id="stat-law">0</div>
+      <div class="sl">经济法</div>
+    </div>
+    <div class="stat-box">
+      <div class="sv" style="color:var(--red)" id="stat-pending">0</div>
+      <div class="sl">待复习</div>
+    </div>
+  </div>
+
+  <div class="error-form">
+    <h3>录入新错题</h3>
+    <div class="form-row">
+      <select id="e-subject">
+        <option value="">科目</option>
+        <option value="会计">会计</option>
+        <option value="税法">税法</option>
+        <option value="经济法">经济法</option>
+      </select>
+      <input type="text" id="e-chapter" placeholder="章节（如：长期股权投资）">
+      <input type="text" id="e-point" placeholder="考点（如：成本法分红）">
+    </div>
+    <div class="form-row">
+      <select id="e-type">
+        <option value="">错误类型</option>
+        <option value="概念混淆">概念混淆</option>
+        <option value="计算错误">计算错误</option>
+        <option value="看漏条件">看漏条件</option>
+        <option value="陷阱题">陷阱题</option>
+      </select>
+      <input type="text" id="e-source" placeholder="来源页码（如：轻一P87）">
+      <input type="text" id="e-date" placeholder="日期（如：6/28）">
+    </div>
+    <div class="form-row-full">
+      <input type="text" id="e-note" placeholder="一句话备注（可选）：错误原因或正确结论">
+    </div>
+    <button class="btn-add" onclick="addError()">+ 录入</button>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterErrors('all', this)">全部</button>
+    <button class="filter-btn" onclick="filterErrors('会计', this)">会计</button>
+    <button class="filter-btn" onclick="filterErrors('税法', this)">税法</button>
+    <button class="filter-btn" onclick="filterErrors('经济法', this)">经济法</button>
+    <button class="filter-btn" onclick="filterErrors('待复习', this)">待复习</button>
+  </div>
+
+  <div id="error-list">
+    <div class="empty-state">
+      <div class="big">📌</div>
+      暂无错题记录<br>做完题后在上方录入
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ PAGE 5: 用书清单 ════════════ -->
+<div id="page-books" class="page">
+  <p class="sec-title">用书清单 · 三科配套（精简版）</p>
+
+  <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px">
+
+    <div class="card card-accent-acct">
+      <h3 style="color:var(--acct);margin-bottom:10px">📘 会计（张敬富 · 东奥）</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div>
+          <div style="font-size:11px;color:var(--text2);margin-bottom:4px">必备</div>
+          <ul style="font-size:12px;color:var(--text2)">
+            <li>张敬富基础班讲义（打印版）</li>
+            <li>东奥《轻松过关一》会计 — 考点精讲+习题</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--text2);margin-bottom:4px">考前冲刺</div>
+          <ul style="font-size:12px;color:var(--text2)">
+            <li>东奥《轻松过关四》— 最后六套题</li>
+            <li>会计分录大全（打印版，每天默写）</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:var(--text3)">
+        ⚡ 已听张敬富课程 → 讲义直接配套使用，无需官方教材
+      </div>
+    </div>
+
+    <div class="card card-accent-tax">
+      <h3 style="color:var(--tax);margin-bottom:10px">📗 税法（刘颖 · 东奥）</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div>
+          <div style="font-size:11px;color:var(--text2);margin-bottom:4px">必备</div>
+          <ul style="font-size:12px;color:var(--text2)">
+            <li>刘颖基础班讲义（打印版）</li>
+            <li>东奥《轻松过关一》税法 — 刘颖配套</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--text2);margin-bottom:4px">考前冲刺</div>
+          <ul style="font-size:12px;color:var(--text2)">
+            <li>东奥《轻松过关四》— 最后六套题</li>
+            <li>自制税率速查表（贴桌边）</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:var(--text3)">
+        ⚡ 有本科税收学基础 → 1.5倍速过概念，重点听CPA特有深度内容
+      </div>
+    </div>
+
+    <div class="card card-accent-law">
+      <h3 style="color:var(--law);margin-bottom:10px">📕 经济法（黄洁洵/郭守杰 · 东奥）</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div>
+          <div style="font-size:11px;color:var(--text2);margin-bottom:4px">必备</div>
+          <ul style="font-size:12px;color:var(--text2)">
+            <li>经济法基础班讲义（打印版）</li>
+            <li>东奥《轻松过关一》经济法 — 口诀版</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--text2);margin-bottom:4px">考前冲刺</div>
+          <ul style="font-size:12px;color:var(--text2)">
+            <li>东奥《轻松过关四》— 最后六套题</li>
+            <li>必背法条关键词版（8月集中背诵）</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:var(--text3)">
+        ⚡ 从零开始，但整体变动小 → 8月前理解法理，8月后集中突击背诵
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card" style="border-left:3px solid var(--red);margin-bottom:20px">
+    <h3 style="color:var(--red)">❌ 不需要买的资料</h3>
+    <p>• 官方教材（三科合计2000+页，时间紧张看不完）</p>
+    <p>• 轻二（题量太大，时间不够）</p>
+    <p>• 轻三（可用免费真题替代）</p>
+    <p style="margin-top:6px"><b>最优组合：每科讲义打印 + 轻一 + 轻四 = 足够过关</b></p>
+  </div>
+
+  <hr class="divider">
+  <p class="sec-title">免费工具</p>
+  <div class="card-grid">
+    <div class="card">
+      <h3>中注协机考模拟系统</h3>
+      <p>考前必练，熟悉机考界面和计算器操作。网址：cpademo.cicpa.org.cn</p>
+    </div>
+    <div class="card">
+      <h3>斯尔题库 APP</h3>
+      <p>三科章节练习 + 智能错题本 + 历年真题，全功能免费</p>
+    </div>
+    <div class="card">
+      <h3>会计分录大全 PDF</h3>
+      <p>网盘搜索"CPA分录大全2026"免费下载，每天默写10个核心分录</p>
+    </div>
+    <div class="card">
+      <h3>本工具（当前页面）</h3>
+      <p>错题索引 + 每日时间表 + 三阶段计划，保存到平板书签每天使用</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function updateCountdown() {
+  const exam = new Date('2026-08-29');
+  const now = new Date();
+  const diff = Math.ceil((exam - now) / (1000 * 60 * 60 * 24));
+  document.getElementById('days-left').textContent = diff > 0 ? `还剩 ${diff} 天` : '考试日到了！';
+}
+updateCountdown();
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+let errors = JSON.parse(localStorage.getItem('cpa_errors') || '[]');
+let currentFilter = 'all';
+
+function saveErrors() {
+  try { localStorage.setItem('cpa_errors', JSON.stringify(errors)); } catch(e) {}
+}
+
+function addError() {
+  const subject = document.getElementById('e-subject').value;
+  const chapter = document.getElementById('e-chapter').value.trim();
+  const point   = document.getElementById('e-point').value.trim();
+  const type    = document.getElementById('e-type').value;
+  const source  = document.getElementById('e-source').value.trim();
+  const date    = document.getElementById('e-date').value.trim();
+  const note    = document.getElementById('e-note').value.trim();
+
+  if (!subject || !chapter || !point) {
+    alert('请至少填写：科目、章节、考点');
+    return;
+  }
+
+  errors.unshift({
+    id: Date.now(),
+    subject, chapter, point, type, source,
+    date: date || new Date().toLocaleDateString('zh-CN', {month:'numeric',day:'numeric'}),
+    note,
+    reviewed: false
+  });
+
+  saveErrors();
+  renderErrors();
+
+  ['e-chapter','e-point','e-source','e-date','e-note'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('e-subject').value = '';
+  document.getElementById('e-type').value = '';
+}
+
+function markReviewed(id) {
+  const e = errors.find(x => x.id === id);
+  if (e) { e.reviewed = !e.reviewed; saveErrors(); renderErrors(); }
+}
+
+function deleteError(id) {
+  errors = errors.filter(x => x.id !== id);
+  saveErrors(); renderErrors();
+}
+
+function filterErrors(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderErrors();
+}
+
+const typeClass = { '概念混淆':'etype-concept','计算错误':'etype-calc','看漏条件':'etype-miss','陷阱题':'etype-trap' };
+const dotClass  = { '会计':'dot-acct','税法':'dot-tax','经济法':'dot-law' };
+
+function renderErrors() {
+  document.getElementById('stat-total').textContent   = errors.length;
+  document.getElementById('stat-acct').textContent    = errors.filter(e=>e.subject==='会计').length;
+  document.getElementById('stat-tax').textContent     = errors.filter(e=>e.subject==='税法').length;
+  document.getElementById('stat-law').textContent     = errors.filter(e=>e.subject==='经济法').length;
+  document.getElementById('stat-pending').textContent = errors.filter(e=>!e.reviewed).length;
+
+  let list = errors;
+  if (currentFilter === '待复习') list = errors.filter(e => !e.reviewed);
+  else if (currentFilter !== 'all') list = errors.filter(e => e.subject === currentFilter);
+
+  const container = document.getElementById('error-list');
+  if (!list.length) {
+    container.innerHTML = `<div class="empty-state"><div class="big">📌</div>${currentFilter==='all'?'暂无错题记录<br>做完题后在上方录入':'该分类暂无记录'}</div>`;
+    return;
+  }
+
+  container.innerHTML = list.map(e => `
+    <div class="error-item ${e.reviewed ? 'reviewed' : ''}">
+      <div class="subject-dot ${dotClass[e.subject]||''}"></div>
+      <div class="ei-main">
+        <div class="ei-title">
+          ${e.subject} · ${e.chapter} · ${e.point}
+          ${e.type ? `<span class="etype ${typeClass[e.type]||''}">${e.type}</span>` : ''}
+          ${e.reviewed ? '<span class="reviewed-badge">已复习</span>' : ''}
+        </div>
+        <div class="ei-meta">${e.date}${e.source ? ' · ' + e.source : ''}</div>
+        ${e.note ? `<div class="ei-note">${e.note}</div>` : ''}
+      </div>
+      <div class="ei-actions">
+        <button class="btn-done" onclick="markReviewed(${e.id})">${e.reviewed?'取消':'已复习'}</button>
+        <button class="btn-del" onclick="deleteError(${e.id})">删除</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+renderErrors();
+</script>
+</body>
+</html>
